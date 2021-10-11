@@ -1,1 +1,3 @@
 # PIXI_Game_Clear
+
+基于pixi和matter的切西瓜小游戏
