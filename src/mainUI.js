@@ -20,6 +20,7 @@ class mainUI{
     backGround;
     leftGround;
     rightGround;
+    itemBodyLayer;
 
     constructor(){
         
@@ -76,15 +77,15 @@ class mainUI{
         this.mouseDownStates = false;
         this.stage.on("mousedown" ,this.onClickMouseDown , this);
         this.stage.on("touchstart" ,this.onClickMouseDown , this);
-        this.stage.on("touchmove" ,this.onClickMouseDown , this);
 
         this.stage.on("mouseup" ,this.onClickMouseUp , this); 
         this.stage.on("mouseupoutside" ,this.onClickMouseUp , this);
         this.stage.on("touchend" ,this.onClickMouseUp , this); 
         this.stage.on("touchendoutside" ,this.onClickMouseUp , this); 
         this.stage.on("mousemove" ,this.onClickMouseMove , this);
-        
-
+        this.stage.on("touchmove" ,this.onClickMouseMove , this);
+        this.itemBodyLayer = new PIXI.Container();
+        this.stage.addChild( this.itemBodyLayer);
 
         // 创建物理世界
         this.createWorld();
@@ -122,7 +123,7 @@ class mainUI{
         var item = new itemBody({
             matterEngine:this.matterEngine , 
             resources:this.resources ,
-            parent :this.stage , 
+            parent :this.itemBodyLayer , 
             type: Math.floor(Math.random()*this.curMaxLevel),
             x:this.craetePosition.x,
             y:this.craetePosition.y,
@@ -252,7 +253,7 @@ class mainUI{
 
     onClickMouseDown(evt){ 
         this.playBgMusic();//手动触发
-        this.mouseX = evt.target && evt.target.toLocal(evt.data.global).x;
+        this.mouseX = evt.currentTarget && evt.currentTarget.toLocal(evt.data.global).x;
         if(!this.nextItem){
             return;
         }
@@ -266,7 +267,7 @@ class mainUI{
     }
 
     onClickMouseUp(evt){
-        this.mouseX = evt.target && evt.target.toLocal(evt.data.global).x;
+        this.mouseX = evt.currentTarget && evt.currentTarget.toLocal(evt.data.global).x;
         if(!this.nextItem){
             return;
         }
@@ -292,8 +293,8 @@ class mainUI{
     }
 
     onClickMouseMove(evt){
-        this.mouseX = evt.target && evt.target.toLocal(evt.data.global).x;
-    
+        this.mouseX = (evt.currentTarget && evt.currentTarget.toLocal(evt.data.global).x);
+        
     }
     collisionStart(boxA,boxB){
         boxA.toNext(boxB.body.position);
