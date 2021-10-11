@@ -297,13 +297,21 @@ class mainUI{
         
     }
     collisionStart(boxA,boxB){
-        boxA.toNext(boxB.body.position);
+        // boxA.toNext(boxB.body.position);
+        // if(this.curMaxLevel < boxA.type){
+        //     this.curMaxLevel = boxA.type;
+        // }
+        // let index = this.itemList.indexOf(boxB);
+        // this.itemList.splice(index, 1);
+        // boxB.release();
+
+        boxB.toNext(boxA.body.position);
         if(this.curMaxLevel < boxA.type){
             this.curMaxLevel = boxA.type;
         }
-        let index = this.itemList.indexOf(boxB);
+        let index = this.itemList.indexOf(boxA);
         this.itemList.splice(index, 1);
-        boxB.release();
+        boxA.release();
     }
 
 

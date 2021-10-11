@@ -98,22 +98,50 @@ class itemBody{
     }
 
     toNext(postion){
+        
+        // this.type ++;
+        // let x = this.body.position.x;
+        // let y = this.body.position.y;
+        // this.removeBody();
+        // this.removeDisplay();
+
+        // var opt = {
+        //     x: (x + postion.x)>>1,
+        //     y: (y + postion.y)>>1,
+        //     matterEngine:this.options.matterEngine , 
+        //     resources:this.resources ,
+        //     parent :this.options.parent , 
+        //     type:this.type,
+        //     isStatic:false
+        // };
+        // this.init(opt);
+
         this.type ++;
         let x = this.body.position.x;
         let y = this.body.position.y;
-        this.removeBody();
-        this.removeDisplay();
 
-        var opt = {
-            x: (x + postion.x)>>1,
-            y: (y + postion.y)>>1,
-            matterEngine:this.options.matterEngine , 
-            resources:this.resources ,
-            parent :this.options.parent , 
-            type:this.type,
-            isStatic:false
-        };
-        this.init(opt);
+        TweenMax.to(this.displayObj.position, 0.08, {
+           x:(x + postion.x)>>1,
+           y:(y + postion.y)>>1,
+            onComplete:  () =>{
+      
+                this.removeBody();
+                this.removeDisplay();
+        
+                var opt = {
+                    x: (x + postion.x)>>1,
+                    y: (y + postion.y)>>1,
+                    matterEngine:this.options.matterEngine , 
+                    resources:this.resources ,
+                    parent :this.options.parent , 
+                    type:this.type,
+                    isStatic:false
+                };
+                this.init(opt);
+            }
+          }
+          );
+
 
     }
 
