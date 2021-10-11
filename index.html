@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="full-screen" content="true" />
+    <meta name="screen-orientation" content="portrait" />
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="360-fullscreen" content="true" />
+    <title>vf</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            border: 0;
+            margin: 0;
+            color: black;
+            /* height: 100%; */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vf-container"></div>
+    <script src="https://cdn.bootcss.com/matter-js/0.14.2/matter.js"></script>
+    <script src="./node_modules/pixi.js/dist/browser/pixi.js"></script>
+    <script src="./node_modules/pixi-particles/dist/pixi-particles.js"></script>
+    <script src="./src/globalData.js"></script>
+    <script src="./src/soundManager.js"></script>
+    <script src="./src/myButton.js"></script>
+    <script src="./src/mainUI.js"></script>
+    <script src="./src/itemBody.js"></script>
+    <script>
+        var gameConfig = {
+            // 'b1'=
+            getItemCallBack:function (){console.log("getItemCallBack")},
+            firstRewardCallBack:function (){console.log("firstRewardCallBack")},
+            rankCallBack:function (){console.log("rankCallBack")},
+            guafenCallBack:function (){console.log("guafenCallBack")},
+        };
+         
+        window["mainUi"].init(gameConfig);
+    </script>
+</body>
+
+</html>
