@@ -143,7 +143,8 @@ class itemBody{
             this.options.parent,
 
             // The collection of particle images to s
-            [this.resources.pngList.textures["star.png"]],
+            // [this.resources.pngList.textures["star.png"]],
+            [this.resources.pngList.textures[this.itemData.name+".png"]],
             {
                 alpha: {
                     list: [
@@ -161,11 +162,11 @@ class itemBody{
                 scale: {
                     list: [
                         {
-                            value: 1,
+                            value: 0.5,
                             time: 0
                         },
                         {
-                            value: 0.3,
+                            value: 0.1,
                             time: 1
                         }
                     ],
@@ -187,11 +188,11 @@ class itemBody{
                 speed: {
                     list: [
                         {
-                            value: 200,
+                            value: this.itemData.radius*5,//200,
                             time: 0
                         },
                         {
-                            value: 100,
+                            value: this.itemData.radius,//100
                             time: 1
                         }
                     ],
@@ -213,7 +214,7 @@ class itemBody{
                 spawnChance: 1,
                 particlesPerWave: 1,
                 emitterLifetime: 0.31,
-                maxParticles: 300,
+                maxParticles: this.itemData.radius*10,//300,
                 pos: {
                     x: x,
                     y: y
