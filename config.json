@@ -1,0 +1,9 @@
+{
+    "des": "请替换到下面路径中到内容为你项目路径，替换完成后，关闭重启 vs code ",
+    "buildPackageName": [
+        "myWork"
+    ],
+    "include": [
+        "./src/mainUI.js"
+    ]
+}

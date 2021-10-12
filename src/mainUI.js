@@ -56,7 +56,6 @@ class mainUI{
             height:document.body.clientHeight,
             transparent:false,
             resolution:1,
-            fps:60
         }); //接收一个16进制的值，用于背景的颜色
         
         document.body.appendChild(app.view);
@@ -183,7 +182,7 @@ class mainUI{
         var ground2 = this.rightGround = Bodies.rectangle(750,500,10,2000 , {isStatic:true});
         Matter.Body.set(ground , "friction" , 1);
         World.add(engine.world,[ground,ground1,ground2]);
-        // Engine.run(engine); // todo
+        Engine.run(engine); // todo
 
         //碰撞回调
         Matter.Events.on(engine, 'collisionStart', (event) => {
@@ -194,10 +193,14 @@ class mainUI{
             for(let i = 0; i < pairs.length; ++i){
                 let pair = pairs[i];
                 var boxA = this.itemList.find(item => {
-                    return item.body.id == pair.bodyA.id;
+                    if(item.body){
+                        return item.body.id == pair.bodyA.id;
+                    }
                 })
                 var boxB = this.itemList.find(item => {
-                    return item.body.id == pair.bodyB.id;
+                    if(item.body){
+                        return item.body.id == pair.bodyB.id;
+                    }
                 })
 
                 //
@@ -321,11 +324,20 @@ class mainUI{
     }
     ticktime;
     ticker(delat){
-        this.ticktime += PIXI.Ticker.shared.deltaMS;
+        var time =  Date.now();;
+        if(PIXI.Ticker.shared.deltaMS <= 20 ){
+
+            console.error(PIXI.Ticker.shared.deltaMS , time- this.dateNow);
+        }
+        // console.error(PIXI.Ticker.shared.deltaMS , time- this.dateNow);
+        this.dateNow =time
+        this.ticktime += PIXI.Ticker.shared.deltaMS * 2;
+        // this.matterRender.time.timestamp =  this.ticktime;
+        this.matterEngine.timing.timestamp = this.ticktime;
         Matter.Runner.tick(this.matterRender, this.matterEngine,this.ticktime);
     }
 
-    update(){
+    update(data){
         if(this.isGameEnd){
             this.showEnd();
             this.pauseTicker();
@@ -376,10 +388,10 @@ class mainUI{
     checkError(){
         let result = false;
         this.itemList.forEach(item =>{
-            if(item.body.position.y - item.body.radius <=ShowSafeLineY && item["hasFall"] === true){
+            if(item.displayObj.y - item.displayObj.radius <=ShowSafeLineY && item["hasFall"] === true){
                 result =  true; // 显示提示线
             }
-            if(item.body.position.y - item.body.radius <=SafeLineY && item["hasFall"] === true){
+            if(item.displayObj.y - item.displayObj.radius <=SafeLineY && item["hasFall"] === true){
                 if(!item.isOverRedLine){
                     item.isOverRedLine = true;
                     item.isOverTimeStamp = Date.now();
@@ -415,9 +427,10 @@ class mainUI{
     pauseTicker(){
         PIXI.Ticker.shared.remove(this.ticker, this);
     }
-
+     dateNow;
     resumeTicker(){
         this.ticktime = 0;
+        this.dateNow = Date.now();
         PIXI.Ticker.shared.add(this.ticker, this);
     }
 
@@ -494,7 +507,5 @@ class mainUI{
     }
 
 }
-
-
 
 window["mainUi"] = new mainUI();

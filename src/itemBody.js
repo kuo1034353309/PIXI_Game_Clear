@@ -32,13 +32,13 @@ class itemBody{
         var boxA = this.body = Bodies.circle(options.x, options.y, this.itemData.radius, {
             friction:1, /**设置球的摩擦力*/
             frictionStatic:1,
-            timeScale:1.8,
             // restitution:0.05,
             density: 0.001//0.001 + 0.001 * this.type * this.type//物
         });
         this.body.radius =  this.itemData.radius
         World.add(options.matterEngine.world,[boxA]);
         sprite.anchor.set(0.5);
+        Matter.Body.set(this.body, "timeScale", 1);
         Matter.Body.set(this.body, "isStatic", options.isStatic);
         Matter.Body.set(this.body, "torque",false);
     }
@@ -122,12 +122,11 @@ class itemBody{
         let x = this.body.position.x;
         let y = this.body.position.y;
         
-        
+        this.removeBody();
         this.tweenItem = TweenMax.to(this.displayObj.position, 0.08, {
            x:(x + postion.x)>>1,
            y:(y + postion.y)>>1,
             onComplete:  () =>{
-                this.removeBody();
                 this.removeDisplay();
                 var opt = {
                     x: (x + postion.x)>>1,
