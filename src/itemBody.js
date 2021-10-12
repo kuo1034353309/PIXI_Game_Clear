@@ -30,8 +30,9 @@ class itemBody{
         var World  = Matter.World;
         var boxA = this.body = Bodies.circle(options.x, options.y, this.itemData.radius, {
             friction:1, /**设置球的摩擦力*/
-            timeScale:2,
-            restitution:0.2,
+            timeScale:1.5,
+            // restitution:0.2,
+            // force:{x:0,y:100},
             density: 0.001//物质密度
 
         });
@@ -67,8 +68,8 @@ class itemBody{
         if(!displayObject || !body){
             return;
         }
-        displayObject.x = body.position.x;
-        displayObject.y = body.position.y;
+        displayObject.x = Math.floor(body.position.x);
+        displayObject.y = Math.floor(body.position.y);
         displayObject.rotation = body.angle;
         displayObject.scaleX = 1//body.scaleX;
         displayObject.scaleY = 1//body.scaleY;

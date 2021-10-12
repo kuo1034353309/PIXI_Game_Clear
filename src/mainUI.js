@@ -1,9 +1,10 @@
 class mainUI{
     gameConfig;
 
-    loader =  new PIXI.Loader();
-    resources;
+    app;
     stage;
+    loader =  new PIXI.Loader();
+    resources; 
     matterEngine;
     matterRender;
     itemList;
@@ -50,11 +51,12 @@ class mainUI{
     createMain(loader,resources){
         //屏幕适配
         let pos = this.resizeWindow();
-        var app = new PIXI.Application({
+        var app = this.app = new PIXI.Application({
             width:document.body.clientWidth,
             height:document.body.clientHeight,
             transparent:false,
             resolution:1,
+            fps:60
         }); //接收一个16进制的值，用于背景的颜色
         
         document.body.appendChild(app.view);
@@ -146,7 +148,7 @@ class mainUI{
         var btn2 = new myButton();
         btn2.texture =  this.resources.pngList.textures["newReward.png"];
         this.stage.addChild(btn2);
-        btn2.clickCallBack = this.gameConfig.firstRewardCallBack;
+        btn2.clickCallBack =  this.release.bind(this);//this.gameConfig.firstRewardCallBack;
         btn2.x= 680;
         btn2.y = 300;
 
@@ -154,14 +156,14 @@ class mainUI{
         btn3.texture = this.resources.pngList.textures["paihang.png"];
         this.stage.addChild(btn3);
         btn3.clickCallBack = this.gameConfig.rankCallBack;
-        btn3.x= 50;
+        btn3.x= 100;
         btn3.y = 300;
 
         var btn4 = new myButton();
         btn4.texture = this.resources.pngList.textures["guafen.png"];
         this.stage.addChild(btn4);
         btn4.clickCallBack = this.gameConfig.guafenCallBack;
-        btn4.x= 50;
+        btn4.x= 100;
         btn4.y = 420;
     }
 
@@ -399,15 +401,7 @@ class mainUI{
             clearTimeout(this.timeOutIdx);
         }
 
-        this.stage.off("mousedown" ,this.onClickMouseDown , this);
-        this.stage.off("touchstart" ,this.onClickMouseDown , this);
-        this.stage.off("touchmove" ,this.onClickMouseDown , this);
-
-        this.stage.off("mouseup" ,this.onClickMouseUp , this); 
-        this.stage.off("mouseupoutside" ,this.onClickMouseUp , this);
-        this.stage.off("touchend" ,this.onClickMouseUp , this); 
-        this.stage.off("touchendoutside" ,this.onClickMouseUp , this); 
-        this.stage.off("mousemove" ,this.onClickMouseMove , this);
+        this.removeStageListener();
     }
 
     reStart(){
@@ -424,15 +418,7 @@ class mainUI{
         this.endLabel.visible = false;
 
         this.isGameEnd = false;
-        this.stage.on("mousedown" ,this.onClickMouseDown , this);
-        this.stage.on("touchstart" ,this.onClickMouseDown , this);
-        this.stage.on("touchmove" ,this.onClickMouseDown , this);
-
-        this.stage.on("mouseup" ,this.onClickMouseUp , this); 
-        this.stage.on("mouseupoutside" ,this.onClickMouseUp , this);
-        this.stage.on("touchend" ,this.onClickMouseUp , this); 
-        this.stage.on("touchendoutside" ,this.onClickMouseUp , this); 
-        this.stage.on("mousemove" ,this.onClickMouseMove , this);
+        this.addStageListener();
         
 
         //创建掉落物体
@@ -440,8 +426,54 @@ class mainUI{
         this.nextItem = this.createItem();
     }
 
+    addStageListener(){
+        if(this.stage){
+            this.stage.on("mousedown" ,this.onClickMouseDown , this);
+            this.stage.on("touchstart" ,this.onClickMouseDown , this);
+            this.stage.on("touchmove" ,this.onClickMouseDown , this);
+    
+            this.stage.on("mouseup" ,this.onClickMouseUp , this); 
+            this.stage.on("mouseupoutside" ,this.onClickMouseUp , this);
+            this.stage.on("touchend" ,this.onClickMouseUp , this); 
+            this.stage.on("touchendoutside" ,this.onClickMouseUp , this); 
+            this.stage.on("mousemove" ,this.onClickMouseMove , this);
+        }
+    }
+
+    removeStageListener(){
+        if(this.stage){
+            this.stage.off("mousedown" ,this.onClickMouseDown , this);
+            this.stage.off("touchstart" ,this.onClickMouseDown , this);
+            this.stage.off("touchmove" ,this.onClickMouseDown , this);
+    
+            this.stage.off("mouseup" ,this.onClickMouseUp , this); 
+            this.stage.off("mouseupoutside" ,this.onClickMouseUp , this);
+            this.stage.off("touchend" ,this.onClickMouseUp , this); 
+            this.stage.off("touchendoutside" ,this.onClickMouseUp , this); 
+            this.stage.off("mousemove" ,this.onClickMouseMove , this);
+        }
+    }
+
     release(){
         //todo
+        this.removeStageListener();
+        if(this.loader){
+            this.loader.destroy();
+            this.loader = undefined;
+        }
+        this.resources = undefined;
+
+        Matter.Engine.clear(this.matterEngine);
+        Matter.World.clear(this.matterEngine.world, false);
+        this.itemList.forEach(item => {
+            item.release();
+        });
+        this.itemList.length = 0;
+            
+        if(this.app && this.app.view){
+            document.body.removeChild(this.app.view);
+        }
+        this.app = undefined;
     }
 
 }
