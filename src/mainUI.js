@@ -69,6 +69,10 @@ class mainUI{
         var bg = new PIXI.Sprite(resources.pngList.textures["bg.png"])//resources.bg.texture);
         this.stage = new PIXI.Container();
         app.stage.addChild(this.stage);
+
+        PIXI.Ticker.shared.maxFps = 60;
+        this.resumeTicker();
+
         this.stage.width = StageWidth;
         this.stage.height = StageHeight;
         this.stage.scale = {x:pos.scaleX,y:pos.scaleY};
@@ -88,7 +92,6 @@ class mainUI{
         this.stage.on("touchmove" ,this.onClickMouseMove , this);
         this.itemBodyLayer = new PIXI.Container();
         this.stage.addChild( this.itemBodyLayer);
-
         // 创建物理世界
         this.createWorld();
         //创建掉落物体
@@ -155,14 +158,14 @@ class mainUI{
         var btn3 = new myButton();
         btn3.texture = this.resources.pngList.textures["paihang.png"];
         this.stage.addChild(btn3);
-        btn3.clickCallBack = this.gameConfig.rankCallBack;
+        btn3.clickCallBack = this.pauseTicker.bind(this);//this.gameConfig.rankCallBack;
         btn3.x= 100;
         btn3.y = 300;
 
         var btn4 = new myButton();
         btn4.texture = this.resources.pngList.textures["guafen.png"];
         this.stage.addChild(btn4);
-        btn4.clickCallBack = this.gameConfig.guafenCallBack;
+        btn4.clickCallBack = this.resumeTicker.bind(this);//this.gameConfig.guafenCallBack;
         btn4.x= 100;
         btn4.y = 420;
     }
@@ -174,12 +177,13 @@ class mainUI{
         Bodies = Matter.Bodies,
         Body = Matter.body;
         const engine = this.matterEngine = Engine.create();
+        this.matterRender = Matter.Runner.create();
         var ground = this.backGround = Bodies.rectangle(200,1430,1200,500 , {isStatic:true,friction:1});
         var ground1 = this.leftGround = Bodies.rectangle(0,500,10,2000 , {isStatic:true});
         var ground2 = this.rightGround = Bodies.rectangle(750,500,10,2000 , {isStatic:true});
         Matter.Body.set(ground , "friction" , 1);
         World.add(engine.world,[ground,ground1,ground2]);
-        Engine.run(engine);
+        // Engine.run(engine); // todo
 
         //碰撞回调
         Matter.Events.on(engine, 'collisionStart', (event) => {
@@ -315,12 +319,16 @@ class mainUI{
         this.itemList.splice(index, 1);
         boxA.release();
     }
-
+    ticktime;
+    ticker(delat){
+        this.ticktime += PIXI.Ticker.shared.deltaMS;
+        Matter.Runner.tick(this.matterRender, this.matterEngine,this.ticktime);
+    }
 
     update(){
         if(this.isGameEnd){
             this.showEnd();
-            this.release();
+            this.pauseTicker();
             return;
         }
         this.itemList.forEach(item => {
@@ -404,6 +412,15 @@ class mainUI{
         this.removeStageListener();
     }
 
+    pauseTicker(){
+        PIXI.Ticker.shared.remove(this.ticker, this);
+    }
+
+    resumeTicker(){
+        this.ticktime = 0;
+        PIXI.Ticker.shared.add(this.ticker, this);
+    }
+
     reStart(){
 
         this.itemList.forEach(item =>{
@@ -419,7 +436,7 @@ class mainUI{
 
         this.isGameEnd = false;
         this.addStageListener();
-        
+        this.resumeTicker();
 
         //创建掉落物体
 

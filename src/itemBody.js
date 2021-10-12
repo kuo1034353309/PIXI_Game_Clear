@@ -9,6 +9,7 @@ class itemBody{
     isOverRedLine;
     isOverTimeStamp;
     oldShowOverStamp;
+    tweenItem;
     constructor(options){
         this.options = options;
         this.type = options.type;
@@ -30,12 +31,12 @@ class itemBody{
         var World  = Matter.World;
         var boxA = this.body = Bodies.circle(options.x, options.y, this.itemData.radius, {
             friction:1, /**设置球的摩擦力*/
-            timeScale:1.5,
-            // restitution:0.2,
-            // force:{x:0,y:100},
-            density: 0.001//物质密度
-
+            frictionStatic:1,
+            timeScale:1.8,
+            // restitution:0.05,
+            density: 0.001//0.001 + 0.001 * this.type * this.type//物
         });
+        this.body.radius =  this.itemData.radius
         World.add(options.matterEngine.world,[boxA]);
         sprite.anchor.set(0.5);
         Matter.Body.set(this.body, "isStatic", options.isStatic);
@@ -68,13 +69,13 @@ class itemBody{
         if(!displayObject || !body){
             return;
         }
-        displayObject.x = Math.floor(body.position.x);
-        displayObject.y = Math.floor(body.position.y);
-        displayObject.rotation = body.angle;
-        displayObject.scaleX = 1//body.scaleX;
-        displayObject.scaleY = 1//body.scaleY;
+        displayObject.x = body.position.x;
+        displayObject.y = body.position.y;
+        displayObject.rotation =  body.angle;
+        displayObject.scaleX = body.render.sprite.xScale
+        displayObject.scaleY = body.render.sprite.yScale;
+        displayObject.anchor.set(body.render.sprite.xOffset , body.render.sprite.yOffset);
         displayObject.width = displayObject.height = this.itemData.radius*2;
-        this.body.radius =  this.itemData.radius
     }
 
     updateEndStates(){
@@ -120,15 +121,14 @@ class itemBody{
         this.type ++;
         let x = this.body.position.x;
         let y = this.body.position.y;
-
-        TweenMax.to(this.displayObj.position, 0.08, {
+        
+        
+        this.tweenItem = TweenMax.to(this.displayObj.position, 0.08, {
            x:(x + postion.x)>>1,
            y:(y + postion.y)>>1,
             onComplete:  () =>{
-      
                 this.removeBody();
                 this.removeDisplay();
-        
                 var opt = {
                     x: (x + postion.x)>>1,
                     y: (y + postion.y)>>1,
@@ -150,19 +150,20 @@ class itemBody{
      * 移除body
      */
     removeBody(){
-        // let index = this._bodies.indexOf(body);
-        // this._bodies.splice(index, 1);
-        Matter.World.remove(this.options.matterEngine.world, this.body, true);
-        this.body  = null;
+        if(this.body){
+            Matter.World.remove(this.options.matterEngine.world, this.body, true);
+            this.body  = null;
+        }
     }
 
     removeDisplay(){
-       
-       if(this.displayObj.parent){ 
-        this.displayObj.parent.removeChild(this.displayObj);
-       }
-       this.displayObj.destroy();
-       this.displayObj = null;
+        if(this.displayObj){
+            if(this.displayObj.parent){ 
+                this.displayObj.parent.removeChild(this.displayObj);
+            }
+            this.displayObj.destroy();
+            this.displayObj = null;
+        }
     }
     showBomb(){
         soundManager.Ins.play(this.resources.bombMu ,false);
@@ -172,7 +173,6 @@ class itemBody{
             this.options.parent,
 
             // The collection of particle images to s
-            // [this.resources.pngList.textures["star.png"]],
             [this.resources.pngList.textures[this.itemData.name+".png"]],
             {
                 alpha: {
@@ -276,6 +276,11 @@ class itemBody{
     
  
     release(){
+        if(this.tweenItem){
+            TweenMax.killTweensOf(this.tweenItem);
+            this.tweenItem = undefined;
+        }
+       
         this.showBomb();
         this.removeBody();
         this.removeDisplay();
