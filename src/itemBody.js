@@ -126,7 +126,7 @@ class itemBody{
         let y = this.body.position.y;
         
         this.removeBody();
-        this.tweenItem = TweenMax.to(this.displayObj.position, 0.08, {
+        this.tweenItem = TweenMax.to(this.displayObj.position, 0.12, {
            x:(x + postion.x)>>1,
            y:(y + postion.y)>>1,
             onComplete:  () =>{

@@ -70,8 +70,7 @@ class mainUI{
         this.stage = new PIXI.Container();
         app.stage.addChild(this.stage);
 
-        // PIXI.Ticker.shared.maxFps = 60;
-        this.resumeTicker();
+        this.resume();
 
         this.stage.width = StageWidth;
         this.stage.height = StageHeight;
@@ -81,15 +80,6 @@ class mainUI{
         this.stage.addChild(bg);
         this.stage.interactive = true;
         this.mouseDownStates = false;
-        this.stage.on("mousedown" ,this.onClickMouseDown , this);
-        this.stage.on("touchstart" ,this.onClickMouseDown , this);
-
-        this.stage.on("mouseup" ,this.onClickMouseUp , this); 
-        this.stage.on("mouseupoutside" ,this.onClickMouseUp , this);
-        this.stage.on("touchend" ,this.onClickMouseUp , this); 
-        this.stage.on("touchendoutside" ,this.onClickMouseUp , this); 
-        this.stage.on("mousemove" ,this.onClickMouseMove , this);
-        this.stage.on("touchmove" ,this.onClickMouseMove , this);
         this.itemBodyLayer = new PIXI.Container();
         this.stage.addChild( this.itemBodyLayer);
         // 创建物理世界
@@ -142,9 +132,6 @@ class mainUI{
             y:this.craetePosition.y,
             isStatic:true});
 
-        if(this.curMaxLevel < item.type){
-            this.curMaxLevel = item.type;
-        }
         return item;
     }
 
@@ -166,14 +153,14 @@ class mainUI{
         var btn3 = new myButton();
         btn3.texture = this.resources.pngList.textures["paihang.png"];
         this.stage.addChild(btn3);
-        btn3.clickCallBack = this.pauseTicker.bind(this);//this.gameConfig.rankCallBack;
+        btn3.clickCallBack = this.pause.bind(this);//this.gameConfig.rankCallBack;
         btn3.x= 100;
         btn3.y = 300;
 
         var btn4 = new myButton();
         btn4.texture = this.resources.pngList.textures["guafen.png"];
         this.stage.addChild(btn4);
-        btn4.clickCallBack = this.resumeTicker.bind(this);//this.gameConfig.guafenCallBack;
+        btn4.clickCallBack = this.resume.bind(this);//this.gameConfig.guafenCallBack;
         btn4.x= 100;
         btn4.y = 420;
     }
@@ -321,27 +308,22 @@ class mainUI{
         
     }
     collisionStart(boxA,boxB){
-        // boxA.toNext(boxB.body.position);
-        // if(this.curMaxLevel < boxA.type){
-        //     this.curMaxLevel = boxA.type;
-        // }
-        // let index = this.itemList.indexOf(boxB);
-        // this.itemList.splice(index, 1);
-        // boxB.release();
-
-        boxB.toNext(boxA.body.position);
-        if(this.curMaxLevel < boxB.type){
-            this.curMaxLevel = boxB.type;
+        if(boxB.type < globalItemData.length){ //满足合并条件
+            boxB.toNext(boxA.body.position);
+            if(this.curMaxLevel < boxB.type){
+                this.curMaxLevel = boxB.type;
+            }
+            this.curMaxLevel = Math.min(this.curMaxLevel , MaxItemLevel);
+            let index = this.itemList.indexOf(boxA);
+            this.itemList.splice(index, 1);
+            boxA.release();
         }
-        let index = this.itemList.indexOf(boxA);
-        this.itemList.splice(index, 1);
-        boxA.release();
     }
 
     update(){
         if(this.isGameEnd){
             this.showEnd();
-            this.pauseTicker();
+            this.pause();
             return;
         }
         this.itemList.forEach(item => {
@@ -426,12 +408,12 @@ class mainUI{
         this.removeStageListener();
     }
 
-    pauseTicker(){
+    pause(){
         this.removeStageListener();
         this.matterRunner && (this.matterRunner.enabled = false);
     }
 
-    resumeTicker(){
+    resume(){
         this.addStageListener();
         this.matterRunner && (this.matterRunner.enabled = true);
     }
@@ -451,7 +433,7 @@ class mainUI{
 
         this.isGameEnd = false;
         this.addStageListener();
-        this.resumeTicker();
+        this.resume();
 
         //创建掉落物体
 

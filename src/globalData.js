@@ -65,3 +65,5 @@ const StageMinScale = 750/StageHeight;
 const SafeLineY = 300;//800//300;
 const ShowSafeLineY = 500;//1000//500;
 const EndStatesTime = 2000; //有一个body持续超过结束线两秒就gg
+
+const MaxItemLevel = 5;
