@@ -32,15 +32,18 @@ class itemBody{
         var boxA = this.body = Bodies.circle(options.x, options.y, this.itemData.radius, {
             friction:1, /**设置球的摩擦力*/
             frictionStatic:1,
+            timeScale:1.3,
+            isStatic:options.isStatic,
+            torque:false,
             // restitution:0.05,
-            density: 0.001//0.001 + 0.001 * this.type * this.type//物
+            density: 0.001 + 0.001 * this.type//物
         });
         this.body.radius =  this.itemData.radius
         World.add(options.matterEngine.world,[boxA]);
         sprite.anchor.set(0.5);
-        Matter.Body.set(this.body, "timeScale", 1);
-        Matter.Body.set(this.body, "isStatic", options.isStatic);
-        Matter.Body.set(this.body, "torque",false);
+        // Matter.Body.set(this.body, "timeScale", 1.5);
+        // Matter.Body.set(this.body, "isStatic", options.isStatic);
+        // Matter.Body.set(this.body, "torque",false);
     }
 
     setPos(x,y){

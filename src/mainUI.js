@@ -7,6 +7,7 @@ class mainUI{
     resources; 
     matterEngine;
     matterRender;
+    matterRunner;
     itemList;
     mouseDownStates;
     nextItem;
@@ -69,7 +70,7 @@ class mainUI{
         this.stage = new PIXI.Container();
         app.stage.addChild(this.stage);
 
-        PIXI.Ticker.shared.maxFps = 60;
+        // PIXI.Ticker.shared.maxFps = 60;
         this.resumeTicker();
 
         this.stage.width = StageWidth;
@@ -124,6 +125,14 @@ class mainUI{
     }
 
     createItem(){
+        // if(this.itemList && this.itemList[0]){//test
+        //     (this.itemList[0].body.y = this.craetePosition.y);
+        //     var item = this.itemList[0];
+        //     this.itemList = [];
+        //     return item;
+        // }
+        
+
         var item = new itemBody({
             matterEngine:this.matterEngine , 
             resources:this.resources ,
@@ -176,13 +185,19 @@ class mainUI{
         Bodies = Matter.Bodies,
         Body = Matter.body;
         const engine = this.matterEngine = Engine.create();
-        this.matterRender = Matter.Runner.create();
+        var run = this.matterRunner = Matter.Runner.create({fps:30 ,isFixed: false ,deltaSampleSize:1 })
+        this.matterRender = Render.create({
+            // element: document.body,
+            engine: engine,
+        });
+        this.matterEngine.world.gravity.y =1;
         var ground = this.backGround = Bodies.rectangle(200,1430,1200,500 , {isStatic:true,friction:1});
         var ground1 = this.leftGround = Bodies.rectangle(0,500,10,2000 , {isStatic:true});
         var ground2 = this.rightGround = Bodies.rectangle(750,500,10,2000 , {isStatic:true});
         Matter.Body.set(ground , "friction" , 1);
         World.add(engine.world,[ground,ground1,ground2]);
-        Engine.run(engine); // todo
+        Matter.Runner.run(run,engine)
+        // Engine.run(engine); // todo
 
         //碰撞回调
         Matter.Events.on(engine, 'collisionStart', (event) => {
@@ -276,7 +291,7 @@ class mainUI{
     }
 
     onClickMouseUp(evt){
-        this.mouseX = evt.currentTarget && evt.currentTarget.toLocal(evt.data.global).x;
+        this.mouseX = evt && evt.currentTarget && evt.currentTarget.toLocal(evt.data.global).x;
         if(!this.nextItem){
             return;
         }
@@ -315,29 +330,15 @@ class mainUI{
         // boxB.release();
 
         boxB.toNext(boxA.body.position);
-        if(this.curMaxLevel < boxA.type){
-            this.curMaxLevel = boxA.type;
+        if(this.curMaxLevel < boxB.type){
+            this.curMaxLevel = boxB.type;
         }
         let index = this.itemList.indexOf(boxA);
         this.itemList.splice(index, 1);
         boxA.release();
     }
-    ticktime;
-    ticker(delat){
-        var time =  Date.now();;
-        if(PIXI.Ticker.shared.deltaMS <= 20 ){
 
-            console.error(PIXI.Ticker.shared.deltaMS , time- this.dateNow);
-        }
-        // console.error(PIXI.Ticker.shared.deltaMS , time- this.dateNow);
-        this.dateNow =time
-        this.ticktime += PIXI.Ticker.shared.deltaMS * 2;
-        // this.matterRender.time.timestamp =  this.ticktime;
-        this.matterEngine.timing.timestamp = this.ticktime;
-        Matter.Runner.tick(this.matterRender, this.matterEngine,this.ticktime);
-    }
-
-    update(data){
+    update(){
         if(this.isGameEnd){
             this.showEnd();
             this.pauseTicker();
@@ -388,10 +389,11 @@ class mainUI{
     checkError(){
         let result = false;
         this.itemList.forEach(item =>{
-            if(item.displayObj.y - item.displayObj.radius <=ShowSafeLineY && item["hasFall"] === true){
+            var y = item.displayObj.y - (item.displayObj.height>>1);
+            if( y<=ShowSafeLineY && item["hasFall"] === true){
                 result =  true; // 显示提示线
             }
-            if(item.displayObj.y - item.displayObj.radius <=SafeLineY && item["hasFall"] === true){
+            if( y<=SafeLineY && item["hasFall"] === true){
                 if(!item.isOverRedLine){
                     item.isOverRedLine = true;
                     item.isOverTimeStamp = Date.now();
@@ -425,13 +427,13 @@ class mainUI{
     }
 
     pauseTicker(){
-        PIXI.Ticker.shared.remove(this.ticker, this);
+        this.removeStageListener();
+        this.matterRunner && (this.matterRunner.enabled = false);
     }
-     dateNow;
+
     resumeTicker(){
-        this.ticktime = 0;
-        this.dateNow = Date.now();
-        PIXI.Ticker.shared.add(this.ticker, this);
+        this.addStageListener();
+        this.matterRunner && (this.matterRunner.enabled = true);
     }
 
     reStart(){
@@ -483,6 +485,7 @@ class mainUI{
             this.stage.off("mousemove" ,this.onClickMouseMove , this);
         }
     }
+    
 
     release(){
         //todo
