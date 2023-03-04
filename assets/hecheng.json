@@ -1,0 +1,184 @@
+{
+"skeleton": {
+	"hash": "Qt7BXMfvP5soLnKwP4rD0Kx4lNI",
+	"spine": "3.8.99",
+	"x": -270,
+	"y": -270,
+	"width": 540,
+	"height": 540,
+	"images": "",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "骨骼", "parent": "root" },
+	{ "name": "骨骼2", "parent": "root" },
+	{ "name": "骨骼3", "parent": "root" },
+	{ "name": "骨骼4", "parent": "root", "scaleX": 2, "scaleY": 2 }
+],
+"slots": [
+	{ "name": "luobe/23eee", "bone": "骨骼4" },
+	{ "name": "luobe/sss", "bone": "骨骼4" },
+	{ "name": "luobe/luob", "bone": "骨骼4", "attachment": "luobe/basketball" },
+	{ "name": "shosuo/effect_u09_01", "bone": "骨骼", "color": "fff08ce8", "attachment": "shosuo/effect_u09_02", "blend": "screen" },
+	{ "name": "hecheng/guang_00000", "bone": "骨骼2", "attachment": "hecheng/guang_00009", "blend": "additive" },
+	{ "name": "hecheng/guang_0", "bone": "骨骼3", "attachment": "hecheng/guang_00009", "blend": "additive" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"hecheng/guang_0": {
+				"hecheng/guang_00000": { "width": 540, "height": 540 },
+				"hecheng/guang_00001": { "width": 540, "height": 540 },
+				"hecheng/guang_00002": { "width": 540, "height": 540 },
+				"hecheng/guang_00003": { "width": 540, "height": 540 },
+				"hecheng/guang_00004": { "width": 540, "height": 540 },
+				"hecheng/guang_00005": { "width": 540, "height": 540 },
+				"hecheng/guang_00006": { "width": 540, "height": 540 },
+				"hecheng/guang_00007": { "width": 540, "height": 540 },
+				"hecheng/guang_00008": { "width": 540, "height": 540 },
+				"hecheng/guang_00009": { "width": 540, "height": 540 }
+			},
+			"hecheng/guang_00000": {
+				"hecheng/guang_00000": { "width": 540, "height": 540 },
+				"hecheng/guang_00001": { "width": 540, "height": 540 },
+				"hecheng/guang_00002": { "width": 540, "height": 540 },
+				"hecheng/guang_00003": { "width": 540, "height": 540 },
+				"hecheng/guang_00004": { "width": 540, "height": 540 },
+				"hecheng/guang_00005": { "width": 540, "height": 540 },
+				"hecheng/guang_00006": { "width": 540, "height": 540 },
+				"hecheng/guang_00007": { "width": 540, "height": 540 },
+				"hecheng/guang_00008": { "width": 540, "height": 540 },
+				"hecheng/guang_00009": { "width": 540, "height": 540 }
+			},
+			"luobe/luob": {
+				"luobe/basketball": { "x": 0.5, "y": 0.5, "width": 173, "height": 173 }
+			},
+			"shosuo/effect_u09_01": {
+				"shosuo/effect_u09_01": { "width": 168, "height": 168 },
+				"shosuo/effect_u09_02": { "width": 168, "height": 168 },
+				"shosuo/effect_u09_03": { "width": 168, "height": 168 },
+				"shosuo/effect_u09_04": { "width": 168, "height": 168 },
+				"shosuo/effect_u09_05": { "width": 168, "height": 168 },
+				"shosuo/effect_u09_06": { "width": 168, "height": 168 },
+				"shosuo/effect_u09_07": { "width": 168, "height": 168 },
+				"shosuo/effect_u09_08": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_09": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_10": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_11": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_12": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_13": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_14": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_15": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_16": { "width": 270, "height": 250 },
+				"shosuo/effect_u09_17": { "width": 270, "height": 250 }
+			}
+		}
+	}
+],
+"animations": {
+	"hecheng": {
+		"slots": {
+			"hecheng/guang_0": {
+				"color": [
+					{ "time": 0.5333, "color": "faff76ff" },
+					{ "time": 0.8667, "color": "ffdf53ff" }
+				],
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.5333, "name": "hecheng/guang_00000" },
+					{ "time": 0.5667, "name": "hecheng/guang_00001" },
+					{ "time": 0.6, "name": "hecheng/guang_00002" },
+					{ "time": 0.6333, "name": "hecheng/guang_00003" },
+					{ "time": 0.6667, "name": "hecheng/guang_00004" },
+					{ "time": 0.7, "name": "hecheng/guang_00005" },
+					{ "time": 0.7333, "name": "hecheng/guang_00006" },
+					{ "time": 0.7667, "name": "hecheng/guang_00007" },
+					{ "time": 0.8, "name": "hecheng/guang_00008" },
+					{ "time": 0.8333, "name": "hecheng/guang_00009" },
+					{ "time": 0.8667, "name": null }
+				]
+			},
+			"hecheng/guang_00000": {
+				"color": [
+					{ "time": 0.6, "color": "fff3b7ff" },
+					{ "time": 0.7333, "color": "ffc26fff" }
+				],
+				"attachment": [
+					{ "name": null },
+					{ "time": 0.6, "name": "hecheng/guang_00000" },
+					{ "time": 0.6333, "name": "hecheng/guang_00001" },
+					{ "time": 0.6667, "name": "hecheng/guang_00002" },
+					{ "time": 0.7, "name": "hecheng/guang_00003" },
+					{ "time": 0.7333, "name": "hecheng/guang_00004" },
+					{ "time": 0.7667, "name": "hecheng/guang_00005" },
+					{ "time": 0.8, "name": "hecheng/guang_00006" },
+					{ "time": 0.8333, "name": "hecheng/guang_00007" },
+					{ "time": 0.8667, "name": "hecheng/guang_00008" },
+					{ "time": 0.9, "name": "hecheng/guang_00009" },
+					{ "time": 0.9333, "name": null }
+				]
+			},
+			"luobe/sss": {
+				"attachment": [
+					{ "time": 1.0667, "name": null }
+				]
+			},
+			"shosuo/effect_u09_01": {
+				"color": [
+					{ "color": "ffa542ff" },
+					{ "time": 1.0667, "color": "ffca13ff" }
+				],
+				"attachment": [
+					{ "name": "shosuo/effect_u09_01" },
+					{ "time": 0.0667, "name": "shosuo/effect_u09_02" },
+					{ "time": 0.1333, "name": "shosuo/effect_u09_03" },
+					{ "time": 0.2, "name": "shosuo/effect_u09_04" },
+					{ "time": 0.2667, "name": "shosuo/effect_u09_05" },
+					{ "time": 0.3333, "name": "shosuo/effect_u09_06" },
+					{ "time": 0.4, "name": "shosuo/effect_u09_07" },
+					{ "time": 0.4667, "name": "shosuo/effect_u09_08" },
+					{ "time": 0.5333, "name": "shosuo/effect_u09_09" },
+					{ "time": 0.6, "name": "shosuo/effect_u09_10" },
+					{ "time": 0.6667, "name": "shosuo/effect_u09_11" },
+					{ "time": 0.7333, "name": "shosuo/effect_u09_12" },
+					{ "time": 0.8, "name": "shosuo/effect_u09_13" },
+					{ "time": 0.8667, "name": "shosuo/effect_u09_14" },
+					{ "time": 0.9333, "name": "shosuo/effect_u09_15" },
+					{ "time": 1, "name": "shosuo/effect_u09_16" },
+					{ "time": 1.0667, "name": "shosuo/effect_u09_17" }
+				]
+			}
+		},
+		"bones": {
+			"骨骼": {
+				"scale": [
+					{ "x": 4.412, "y": 4.412 }
+				]
+			},
+			"骨骼2": {
+				"scale": [
+					{ "time": 0.6, "x": 1.635, "y": 1.635 }
+				]
+			},
+			"骨骼3": {
+				"scale": [
+					{ "time": 0.5333, "x": 1.144, "y": 1.144 }
+				]
+			},
+			"骨骼4": {
+				"translate": [
+					{ "time": 0.9333, "x": -1.55, "y": -1.55 }
+				],
+				"scale": [
+					{ "x": 0.106, "y": 0 },
+					{ "time": 0.5, "x": 0, "y": 0 },
+					{ "time": 0.6333, "x": 1.2, "y": 1.2 },
+					{ "time": 0.7667 }
+				]
+			}
+		}
+	}
+}
+}

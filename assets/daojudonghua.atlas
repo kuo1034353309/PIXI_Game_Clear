@@ -1,0 +1,27 @@
+
+daojudonghua.png
+size: 831,463
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+B
+  rotate: false
+  xy: 464, 96
+  size: 365, 365
+  orig: 365, 365
+  offset: 0, 0
+  index: -1
+D
+  rotate: false
+  xy: 464, 6
+  size: 88, 88
+  orig: 88, 88
+  offset: 0, 0
+  index: -1
+G
+  rotate: true
+  xy: 2, 2
+  size: 459, 460
+  orig: 459, 460
+  offset: 0, 0
+  index: -1

@@ -1,495 +1,281 @@
-class mainUI{
+import * as PIXI from 'pixi.js';
+import { Timer } from './Timer.js';
+import {
+    StageWidth,
+    DebugMatter,
+    StageMinHeight,
+    GuildStatesEnum,
+    StageHeight,
+    EventType,
+    SkipType,
+    AlertType,
+    HrefUrl,
+    ItemType,
+    Debug,
+    StageMaxHeight,
+    setCurStageHeight,
+    getInnerWidth,
+    getInnerHeight,
+    setMuHeight,
+} from './GlobalData.js';
+import { LoadingUI } from "./LoadingUI.js";
+import { EventMamager } from "./EventMamager.js";
+import { CommonUI } from './CommonUI';
+import { UIGameCore } from './UIGameCore.js';
+import { AlertLeave } from './AlertLeave';
+import { UIBegin } from './UIBegin.js';
+import { SoundManager } from "./SoundManager"
+import { Test } from './Test'
+class mainUI {
     gameConfig;
-
+    canvas;
     app;
     stage;
-    loader =  new PIXI.Loader();
-    resources; 
-    matterEngine;
-    matterRender;
-    matterRunner;
-    itemList;
-    mouseDownStates;
-    nextItem;
-    mouseX;
-    craetePosition;
-    curMaxLevel;
-    isBgMusicPlaying;
-    errorLine;
-    isGaming;
-    endLabel;
-    timeOutIdx;
-    backGround;
-    leftGround;
-    rightGround;
-    itemBodyLayer;
+    loader = new PIXI.Loader();
+    resources;
+    loadingUI;
+    constructor() {
 
-    constructor(){
-        
     }
 
-    init(gameConfig) {
+    init(gameConfig, canvas) {
+        canvas.width = `${window.innerWidth}px`;//设计尺寸 // style.width默认优先实际尺寸
+        canvas.height = `${window.innerHeight}px`;
+        canvas.style.width = `${getInnerWidth()}px`;
+        canvas.style.height = `${getInnerHeight()}px`;
+        this.canvas = canvas;
         this.gameConfig = gameConfig;
-        this.isBgMusicPlaying =false;
-        this.isGameEnd = false;
-        this.timeOutIdx = -1;
-        this.itemList = [];
-        this.craetePosition = {x:350,y:200};
-        this.curMaxLevel = 0;
-        //加载资源资源
-        this.loadAllRes(this.createMain.bind(this));
-       
+        const timeInit = Timer.Ins; // 初始化时间模块
+        this.createApp();
+        this.initPreload();
+        let a = new Test();
+    }
+    initPreload() {
+        // 加载资源资源
+        this.processS = "./assets/"
+        const str = this.processS; // process.env.PUBLIC_URL
+        this.loader.add('loading', `${str}/loading.png`).load(() => {
+            this.loadingUI = new LoadingUI({ resources: this.loader.resources });
+            this.uiLayer.addChild(this.loadingUI);
+            this.loadAllRes(() => {
+                if (this.loadingUI) {
+                    this.loadingUI.release();
+                }
+                this.createInitUI();
+            });
+        });
     }
 
-    loadAllRes(callback){
-        this.loader.add("pngList" , "./assets/pngList.json");
-        this.loader.add("bgmusic","./assets/bgmusic.mp3" , {loadType:PIXI.LoaderResource.LOAD_TYPE.XHR, xhrType: 'arraybuffer'});
-        this.loader.add("bombMu","./assets/bombMu.mp3" , {loadType:PIXI.LoaderResource.LOAD_TYPE.XHR, xhrType: 'arraybuffer'});
+    loadAllRes(callback) {
+        const str = this.processS; // process.env.PUBLIC_URL
+        this.loader
+            .add('mask', `${str}mask.png`)
+            .add('beginAni', `${str}beginAni.png`)
+            .add('beginBg', `${str}beginBg.png`)
+            .add('beginbg1', `${str}beginbg1.png`)
+            .add('beginbg2', `${str}beginbg2.png`)
+            .add('beginbg3', `${str}beginbg3.png`)
+            .add('alertBg', `${str}alertBg.png`)
+            .add('endGameBg', `${str}endGameBg.png`)
+            .add('bg3', `${str}bg3.png`)
+            .add('bg4', `${str}bg4.png`)
+            .add('enterBtn', `${str}enterBtn.png`)
+            .add('grayBtn', `${str}grayBtn.png`)
+            .add('logo', `${str}logo.png`)
+            .add('common', `${str}common.json`)
+            .add('beginUI', `${str}beginUI.json`)
+            .add('alertUI', `${str}alertUI.json`)
+            .add('gameUI', `${str}gameUI.json`)
+            .add('gamebg', `${str}gamebg.png`)
+            .add('gamebg1', `${str}gamebg1.png`)
+            .add('endGameBg1', `${str}endGameBg1.png`)
+            .add('daojudonghua', `${str}daojudonghua.json`)
+            .add('hecheng', `${str}hecheng.json`)
+            .add('basketball', `${str}basketball.json`)
+            .add('caidai', `${str}caidai.json`)
+            .add('hechengpiqiu', `${str}hechengpiqiu.json`)
+            .add('bg1', `${str}bg1.png`)
+            .add('bg2', `${str}bg2.png`);
+        this.loader.onProgress.add(data => {
+            EventMamager.Ins.dispatchEvent(EventType.loadProgress, data.progress);
+        });
+        SoundManager.Ins.playSound('bombMu.mp3', false, 0);
+        SoundManager.Ins.playSound('basketBall.mp3', false, 0);
         this.loader.load(callback);
-
     }
 
-    createMain(loader,resources){
-        //屏幕适配
-        let pos = this.resizeWindow();
-        var app = this.app = new PIXI.Application({
-            width:document.body.clientWidth,
-            height:document.body.clientHeight,
-            transparent:false,
-            resolution:1,
-        }); //接收一个16进制的值，用于背景的颜色
-        
-        document.body.appendChild(app.view);
-        app.view.style.position = "absolute";
-        app.view.style.left = 0 + "px";
-        app.view.style.top = 0 + "px";
+    createInitUI() {
+        const optionsCommon = {
+            resources: this.resources,
+            scoreBtnCallBack: () => {
+                SkipModule.Ins.skipTo(SkipType.urlSkip, HrefUrl.exchange);
+            },
+            mineRewardsCallBack: () => {
+                SkipModule.Ins.skipTo(SkipType.urlSkip, HrefUrl.myReward);
+            },
+        };
 
-        app.view.style.transform = `matrix(${pos.scaleX}, 0, 0, ${pos.scaleY}, 0, 0);`
+        this.commonUI = new CommonUI(optionsCommon);
+        this.commonLayer.addChild(this.commonUI);
+
+        this.addListen();
+
+        this.begin();
+
+        const gameInfo = {}//HttpRequest.Ins.userInfoData;
+        if (gameInfo && gameInfo.acquirePointsOfLastPeriod && Number(gameInfo.acquirePointsOfLastPeriod) > 0) {
+            this.showScoreAlert('type1', gameInfo.acquirePointsOfLastPeriod);
+        }
+    }
+
+    addListen() {
+        PIXI.Ticker.shared.add(del => {
+            EventMamager.Ins.dispatchEvent(EventType.ticker, del);
+        });
+        EventMamager.Ins.addEvent(EventType.debugTest, this.appearRequest, this)
+
+        document.addEventListener('visibilitychange', this.appearRequest.bind(this), false);
+
+        window.addEventListener('moduleAppear', appear => {
+            console.log('.................  moduleAppear', appear);
+        });
+        // todo...
+    }
+
+    appearRequest(data) {
+        if (document.hidden) {
+            console.log('.................  document.hidden');
+            SoundManager.Ins.playSound('basketBall.mp3', false, 0);
+            PIXI.Ticker.shared.stop();
+            this.gameUI && this.gameUI.pause();;
+        } else {
+            console.log('.................  document.show');
+            // 去查数据
+            SoundManager.Ins.pauseAll();
+
+            PIXI.Ticker.shared.start();
+            this.gameUI && this.gameUI.resume();
+        }
+    }
+    createApp() {
+        const { resources } = this.loader;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const scale = 1;
+        setCurStageHeight((h / w) * StageWidth);
+        this.app = new PIXI.Application({
+            view: this.canvas,
+            width: StageWidth * scale,
+            height: StageHeight * scale,
+            resolution: 1,
+            backgroundColor: 0xfbb555,
+        }); // 接收一个16进制的值，用于背景的颜色
+        if (DebugMatter) {
+            this.canvas.style.opacity = 0.3;
+        }
+
+        this.app.view.style.position = 'absolute';
         this.resources = resources;
-        var bg = new PIXI.Sprite(resources.pngList.textures["bg.png"])//resources.bg.texture);
-        this.stage = new PIXI.Container();
-        app.stage.addChild(this.stage);
+        this.stage = this.app.stage;
+        this.stage.x = (StageWidth * scale - StageWidth) >> 1;
+        this.stage.y = (StageHeight * scale - StageMaxHeight) >> 1;
 
-        this.resume();
-
-        this.stage.width = StageWidth;
-        this.stage.height = StageHeight;
-        this.stage.scale = {x:pos.scaleX,y:pos.scaleY};
-        this.stage.x = (document.body.clientWidth-StageWidth*pos.scaleX)>>1;
-        this.stage.y = (document.body.clientHeight-StageHeight*pos.scaleY)>>1
-        this.stage.addChild(bg);
         this.stage.interactive = true;
         this.mouseDownStates = false;
-        this.itemBodyLayer = new PIXI.Container();
-        this.stage.addChild( this.itemBodyLayer);
-        // 创建物理世界
-        this.createWorld();
-        //创建掉落物体
 
-        this.nextItem = this.createItem();
-        //创建活动图标
-        this.craeteActIcon();
-        //创建危险提示
-        this.craeteErrorLine();
-        // game over 提示
-        this.createEndLabel();
+        this.createLayer();
+    }
+    createLayer() {
+        this.uiLayer = new PIXI.Container();
+        this.stage.addChild(this.uiLayer);
+
+        this.beginUILayer = new PIXI.Container();
+        this.stage.addChild(this.beginUILayer);
+
+        this.commonLayer = new PIXI.Container();
+        this.stage.addChild(this.commonLayer);
+
+        this.alertLayer = new PIXI.Container();
+        this.stage.addChild(this.alertLayer);
     }
 
-    resizeWindow(){
-        console.log(" ....................");
-        let windowW = document.body.clientWidth;
-        let windowH = document.body.clientHeight;
-        let scaleX = windowW/StageWidth;
-        let scaleY =  windowH/StageMinHeight;
-        let scale = Math.min(scaleX ,scaleY);
-
-        let s = windowW / windowH;
-        if(s >= StageMaxScale){
-            s=StageMaxScale;
-        }else if(s <= StageMinScale){
-            s=StageMinScale;
-        }else{//
+    begin() {
+        const optionsBegin = {
+            resources: this.resources,
+            enterBtnCallBack: this.enterGameBefore.bind(this),
+            reviewInfoCallBack: () => {
+                console.error('查看积分记录');
+            },
+            leaveBtnCallBack: this.openLeave.bind(this),
         };
-      
-        return {scaleX:scale , scaleY:scale}; // 缩放比
+        if (!this.beginUI) {
+            this.beginUI = new UIBegin(optionsBegin);
+            this.beginUILayer.addChild(this.beginUI);
+        }
+        this.beginUI.visible = true;
     }
 
-    createItem(){
-        // if(this.itemList && this.itemList[0]){//test
-        //     (this.itemList[0].body.y = this.craetePosition.y);
-        //     var item = this.itemList[0];
-        //     this.itemList = [];
-        //     return item;
-        // }
-        
+    enterGameBefore() {
+        const authBack = () => {
+            this.createGameCore();
+        };
 
-        var item = new itemBody({
-            matterEngine:this.matterEngine , 
-            resources:this.resources ,
-            parent :this.itemBodyLayer , 
-            type: Math.floor(Math.random()*this.curMaxLevel),
-            x:this.craetePosition.x,
-            y:this.craetePosition.y,
-            isStatic:true});
-
-        return item;
+        authBack();
     }
-
-    craeteActIcon(){
-        var btn1 = new myButton();
-        btn1.texture = this.resources.pngList.textures["getItem.png"];
-        this.stage.addChild(btn1);
-        btn1.clickCallBack = this.reStart.bind(this)//this.gameConfig.getItemCallBack;
-        btn1.x= 680;
-        btn1.y = 420;
-
-        var btn2 = new myButton();
-        btn2.texture =  this.resources.pngList.textures["newReward.png"];
-        this.stage.addChild(btn2);
-        btn2.clickCallBack =  this.release.bind(this);//this.gameConfig.firstRewardCallBack;
-        btn2.x= 680;
-        btn2.y = 300;
-
-        var btn3 = new myButton();
-        btn3.texture = this.resources.pngList.textures["paihang.png"];
-        this.stage.addChild(btn3);
-        btn3.clickCallBack = this.pause.bind(this);//this.gameConfig.rankCallBack;
-        btn3.x= 100;
-        btn3.y = 300;
-
-        var btn4 = new myButton();
-        btn4.texture = this.resources.pngList.textures["guafen.png"];
-        this.stage.addChild(btn4);
-        btn4.clickCallBack = this.resume.bind(this);//this.gameConfig.guafenCallBack;
-        btn4.x= 100;
-        btn4.y = 420;
+    openLeave() {
+        if (this.leaveAlert) {
+            this.leaveAlert.release();
+        }
+        this.leaveAlert = new AlertLeave({ resources: this.resources, leaveCallBack: undefined });
+        this.alertLayer.addChild(this.leaveAlert);
     }
+    createGameCore() {
 
-    createWorld(){
-        const Engine = Matter.Engine, 
-        Render = Matter.Render,
-        World  = Matter.World,
-        Bodies = Matter.Bodies,
-        Body = Matter.body;
-        const engine = this.matterEngine = Engine.create();
-        var run = this.matterRunner = Matter.Runner.create({fps:30 ,isFixed: false ,deltaSampleSize:1 })
-        this.matterRender = Render.create({
-            // element: document.body,
-            engine: engine,
-        });
-        this.matterEngine.world.gravity.y =1;
-        var ground = this.backGround = Bodies.rectangle(200,1430,1200,500 , {isStatic:true,friction:1});
-        var ground1 = this.leftGround = Bodies.rectangle(0,500,10,2000 , {isStatic:true});
-        var ground2 = this.rightGround = Bodies.rectangle(750,500,10,2000 , {isStatic:true});
-        Matter.Body.set(ground , "friction" , 1);
-        World.add(engine.world,[ground,ground1,ground2]);
-        Matter.Runner.run(run,engine)
-        // Engine.run(engine); // todo
+        // this.alertLayer.addChild(Guide.Ins);
+        if (this.beginUI) {
+            this.beginUI.visible = false;
+        }
+        const { gameItemOneTaskActivityId, gameItemTwoTaskActivityId } = {}
+        const optionsGame = {
+            resources: this.resources,
+            app: this.app,
+            EndCallBack: () => {
+                this.gameEnd();
+            },
+            gameConfig: this.gameConfig,
 
-        //碰撞回调
-        Matter.Events.on(engine, 'collisionStart', (event) => {
-            var pairs = event.pairs;
-            // if(this.nextItem){
-            //     this.itemList.push(this.nextItem)
-            // }
-            for(let i = 0; i < pairs.length; ++i){
-                let pair = pairs[i];
-                var boxA = this.itemList.find(item => {
-                    if(item.body){
-                        return item.body.id == pair.bodyA.id;
-                    }
-                })
-                var boxB = this.itemList.find(item => {
-                    if(item.body){
-                        return item.body.id == pair.bodyB.id;
-                    }
-                })
-
-                //
-                if(boxA && boxB && boxA.type === boxB.type){
-                    this.collisionStart(boxA,boxB);
+            mineRewardsCallBack: () => {
+                this.toExchange();
+            },
+            scoreBtnCallBack: () => {
+                SkipModule.Ins.skipTo(SkipType.urlSkip, this.gameConfig.data.themeConfig.exchangeUrl);
+            },
+            ruleBtnCallBack: () => {
+                SkipModule.Ins.skipTo(SkipType.urlSkip, this.gameConfig.data.themeConfig.ruleUrl);
+            },
+            leaveBtnCallBack: () => {
+                HttpRequest.Ins.getUserInfoData(this.begin.bind(this), this.begin.bind(this));
+            },
+            ItemIcon1CallBack: () => {
+                SkipModule.Ins.skipTo(SkipType.alertSkip, gameItemOneTaskActivityId);
+            },
+            ItemIcon2CallBack: callback => {
+                const itemId = HttpRequest.Ins.getItemByType(ItemType.zhenping);
+                if (itemId.num > 0) {
+                    this.showAlertBall(() => {
+                        HttpRequest.Ins.useGameProps(itemId.ids[0], () => {
+                            callback && callback();
+                        });
+                    });
+                } else {
+                    SkipModule.Ins.skipTo(SkipType.alertSkip, gameItemTwoTaskActivityId);
                 }
-
-
-                if(pair.bodyA.id !== this.leftGround.id && pair.bodyB.id !== this.rightGround.id 
-                    && pair.bodyA.id !== this.rightGround.id && pair.bodyB.id !== this.leftGround.id){
-                        boxA && (boxA["hasFall"] = true);
-                        boxB && (boxB["hasFall"] = true);
-                }
-    
-            }
-            
-        })
-
-        // Matter.Events.on(engine, 'collisionEnd', (event) => {
-        //     var pairs = event.pairs;
-        //     for(let i = 0; i < pairs.length; ++i){
-        //         let pair = pairs[i];
-        //         var boxA = this.itemList.find(item => {
-        //             return item.body.id == pair.bodyA.id;
-        //         })
-        //         var boxB = this.itemList.find(item => {
-        //             return item.body.id == pair.bodyB.id;
-        //         })
-          
-        //         if(boxA && boxB && boxA.type === boxB.type){
-        //             this.collisionStart(boxA,boxB);
-        //         }
-
-        //         if(pair.bodyA.id !== this.leftGround.id && pair.bodyB.id !== this.rightGround.id 
-        //             && pair.bodyA.id !== this.rightGround.id && pair.bodyB.id !== this.leftGround.id){
-        //                 boxA && (boxA["hasFall"] = true);
-        //                 boxB && (boxB["hasFall"] = true);
-        //         }
-        
-        //     }
-        // })
-
-
-        Matter.Events.on(engine, 'afterUpdate', (event) => {
-            this.update();
-        });
-  
+            },
+        };
+        this.gameUI = new UIGameCore(optionsGame);
+        this.uiLayer.addChild(this.gameUI);
     }
 
-    createEndLabel(){
-        this.endLabel =  new PIXI.Text('GAME  OVER',{fontFamily : 'Arial', fontSize: 40, fill : 0xff0000, align : 'center'});
-        this.stage.addChild(this.endLabel);
-        this.endLabel.visible = false;
-        this.endLabel.anchor.set(0.5);
-        this.endLabel.width = 200;
-        this.endLabel.x = 350;
-        this.endLabel.y = 500;
-    }
-
-    onClickMouseDown(evt){ 
-        this.playBgMusic();//手动触发
-        this.mouseX = evt.currentTarget && evt.currentTarget.toLocal(evt.data.global).x;
-        if(!this.nextItem){
-            return;
-        }
-        this.mouseDownStates = true;
-        
-    }
-    
-    playBgMusic(){
-        !this.isBgMusicPlaying && soundManager.Ins.play(this.resources.bgmusic , true);
-        this.isBgMusicPlaying = true;
-    }
-
-    onClickMouseUp(evt){
-        this.mouseX = evt && evt.currentTarget && evt.currentTarget.toLocal(evt.data.global).x;
-        if(!this.nextItem){
-            return;
-        }
-        this.mouseDownStates = false;
-        if(this.nextItem){//元素开启刚体
-            this.nextItem["hasFall"] = false;
-            this.itemList.push(this.nextItem);
-
-            let data = globalItemData[this.nextItem.type];
-            let x = Math.max(this.mouseX,data.radius);
-            x = Math.min(x , StageWidth-data.radius);
-            this.nextItem.setPos(x , this.craetePosition.y);
-
-            this.nextItem.openStatic();
-        }
-        this.nextItem = null;
-        this.timeOutIdx = setTimeout(() => {
-            if(!this.nextItem){
-                this.nextItem = this.createItem();
-            }
-            
-        }, 800);
-    }
-
-    onClickMouseMove(evt){
-        this.mouseX = (evt.currentTarget && evt.currentTarget.toLocal(evt.data.global).x);
-        
-    }
-    collisionStart(boxA,boxB){
-        if(boxB.type < globalItemData.length){ //满足合并条件
-            boxB.toNext(boxA.body.position);
-            if(this.curMaxLevel < boxB.type){
-                this.curMaxLevel = boxB.type;
-            }
-            this.curMaxLevel = Math.min(this.curMaxLevel , MaxItemLevel);
-            let index = this.itemList.indexOf(boxA);
-            this.itemList.splice(index, 1);
-            boxA.release();
-        }
-    }
-
-    update(){
-        if(this.isGameEnd){
-            this.showEnd();
-            this.pause();
-            return;
-        }
-        this.itemList.forEach(item => {
-            item.update();
-        });
-        this.checkError();
-        var time = Date.now();
-        if(!isNaN(this.oldTime) && time- this.oldTime > 200){
-            this.oldTime = time;
-            this.errorLine.visible = !this.errorLine.visible;
-        }
-        if(this.mouseDownStates && this.nextItem){
-            let data = globalItemData[this.nextItem.type];
-            let x = Math.max(this.mouseX,data.radius);
-            x = Math.min(x , StageWidth-data.radius);
-            this.nextItem.setPos(x , this.craetePosition.y);
-        }
-    }
-
-    craeteErrorLine(){
-        var line = this.errorLine = new PIXI.Graphics();
-        line.lineStyle(10,0xff0000);
-        line.moveTo(0,SafeLineY);
-        line.lineTo(StageWidth,SafeLineY);
-        this.stage.addChild(line);
-        line.visible = false;
-
-        // var line1 = new PIXI.Graphics();
-        // line1.lineStyle(10,0xff00);
-        // line1.moveTo(0,ShowSafeLineY);
-        // line1.lineTo(StageWidth,ShowSafeLineY);
-        // this.stage.addChild(line1);
-    }
-
-    oldTime = NaN;
-    showErrorLine(){
-       !this.boo &&  (this.oldTime = Date.now());
-    }
-
-    hideErrorLine(){
-        this.oldTime = NaN;
-        this.errorLine.visible = false;
-    }
-    boo = false;
-    checkError(){
-        let result = false;
-        this.itemList.forEach(item =>{
-            var y = item.displayObj.y - (item.displayObj.height>>1);
-            if( y<=ShowSafeLineY && item["hasFall"] === true){
-                result =  true; // 显示提示线
-            }
-            if( y<=SafeLineY && item["hasFall"] === true){
-                if(!item.isOverRedLine){
-                    item.isOverRedLine = true;
-                    item.isOverTimeStamp = Date.now();
-                }else{
-                    var time = Date.now();
-                    if(time - item.isOverTimeStamp >= EndStatesTime){
-                        this.isGameEnd =  true; // 游戏结束
-                    }
-                }
-            }else{
-                item.isOverRedLine = false;
-                item.isOverTimeStamp = NaN;
-            }
-        });
-        if(result){
-            this.showErrorLine(); 
-            this.boo = true;
-        }else{
-            this.boo = false;
-            this.hideErrorLine();
-        }
-    }
-
-    showEnd(){
-        this.endLabel.visible = true;
-        if(this.timeOutIdx !== -1){
-            clearTimeout(this.timeOutIdx);
-        }
-
-        this.removeStageListener();
-    }
-
-    pause(){
-        this.removeStageListener();
-        this.matterRunner && (this.matterRunner.enabled = false);
-    }
-
-    resume(){
-        this.addStageListener();
-        this.matterRunner && (this.matterRunner.enabled = true);
-    }
-
-    reStart(){
-
-        this.itemList.forEach(item =>{
-            item.release();
-        });
-        this.itemList = [];
-        if(this.nextItem){
-            this.nextItem.release();
-        }
-        this.nextItem = null;
-        this.curMaxLevel = 0;
-        this.endLabel.visible = false;
-
-        this.isGameEnd = false;
-        this.addStageListener();
-        this.resume();
-
-        //创建掉落物体
-
-        this.nextItem = this.createItem();
-    }
-
-    addStageListener(){
-        if(this.stage){
-            this.stage.on("mousedown" ,this.onClickMouseDown , this);
-            this.stage.on("touchstart" ,this.onClickMouseDown , this);
-            this.stage.on("touchmove" ,this.onClickMouseDown , this);
-    
-            this.stage.on("mouseup" ,this.onClickMouseUp , this); 
-            this.stage.on("mouseupoutside" ,this.onClickMouseUp , this);
-            this.stage.on("touchend" ,this.onClickMouseUp , this); 
-            this.stage.on("touchendoutside" ,this.onClickMouseUp , this); 
-            this.stage.on("mousemove" ,this.onClickMouseMove , this);
-        }
-    }
-
-    removeStageListener(){
-        if(this.stage){
-            this.stage.off("mousedown" ,this.onClickMouseDown , this);
-            this.stage.off("touchstart" ,this.onClickMouseDown , this);
-            this.stage.off("touchmove" ,this.onClickMouseDown , this);
-    
-            this.stage.off("mouseup" ,this.onClickMouseUp , this); 
-            this.stage.off("mouseupoutside" ,this.onClickMouseUp , this);
-            this.stage.off("touchend" ,this.onClickMouseUp , this); 
-            this.stage.off("touchendoutside" ,this.onClickMouseUp , this); 
-            this.stage.off("mousemove" ,this.onClickMouseMove , this);
-        }
-    }
-    
-
-    release(){
-        //todo
-        this.removeStageListener();
-        if(this.loader){
-            this.loader.destroy();
-            this.loader = undefined;
-        }
-        this.resources = undefined;
-
-        Matter.Engine.clear(this.matterEngine);
-        Matter.World.clear(this.matterEngine.world, false);
-        this.itemList.forEach(item => {
-            item.release();
-        });
-        this.itemList.length = 0;
-            
-        if(this.app && this.app.view){
-            document.body.removeChild(this.app.view);
-        }
-        this.app = undefined;
-    }
 
 }
 

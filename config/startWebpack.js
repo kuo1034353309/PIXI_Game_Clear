@@ -4,7 +4,7 @@ const package = require('../package.json');
 module.exports = {
     mode: 'development',
     devtool: 'source-map',
-    entry: ["./src/globalData.js" , "./src/soundManager.js","./src/myButton.js","./src/itemBody.js","./src/mainUI.js"],//'./src',
+    entry: ["./src/mainUI.js"],//'./src',
     module: {
         rules: [
             {

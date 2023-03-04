@@ -1,0 +1,90 @@
+
+hechengpiqiu.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+images/Y_0000
+  rotate: false
+  xy: 253, 393
+  size: 238, 238
+  orig: 300, 300
+  offset: 31, 31
+  index: -1
+images/Yc_0000
+  rotate: true
+  xy: 493, 415
+  size: 216, 252
+  orig: 256, 256
+  offset: 16, 2
+  index: -1
+images/lizi_0000
+  rotate: false
+  xy: 948, 348
+  size: 54, 50
+  orig: 300, 300
+  offset: 132, 127
+  index: -1
+images/lizi_0002
+  rotate: false
+  xy: 242, 35
+  size: 128, 128
+  orig: 300, 300
+  offset: 91, 81
+  index: -1
+images/lizi_0004
+  rotate: false
+  xy: 733, 2
+  size: 192, 192
+  orig: 300, 300
+  offset: 59, 49
+  index: -1
+images/lizi_0006
+  rotate: false
+  xy: 242, 165
+  size: 226, 226
+  orig: 300, 300
+  offset: 42, 32
+  index: -1
+images/lizi_0008
+  rotate: false
+  xy: 2, 159
+  size: 238, 238
+  orig: 300, 300
+  offset: 36, 26
+  index: -1
+images/lizi_0010
+  rotate: false
+  xy: 493, 192
+  size: 238, 221
+  orig: 300, 300
+  offset: 45, 35
+  index: -1
+images/lizi_0012
+  rotate: true
+  xy: 747, 400
+  size: 231, 232
+  orig: 300, 300
+  offset: 38, 31
+  index: -1
+images/lizi_0014
+  rotate: false
+  xy: 2, 399
+  size: 249, 232
+  orig: 300, 300
+  offset: 22, 29
+  index: -1
+images/lizi_0016
+  rotate: false
+  xy: 470, 40
+  size: 232, 150
+  orig: 300, 300
+  offset: 8, 101
+  index: -1
+images/shanguang_0000
+  rotate: true
+  xy: 733, 196
+  size: 202, 213
+  orig: 256, 256
+  offset: 29, 23
+  index: -1

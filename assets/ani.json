@@ -1,0 +1,92 @@
+{"frames": [
+
+{
+	"filename": "icon1.png",
+	"frame": {"x":444,"y":912,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50}
+},
+{
+	"filename": "icon10.png",
+	"frame": {"x":2,"y":2,"w":460,"h":464},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":460,"h":464},
+	"sourceSize": {"w":460,"h":464}
+},
+{
+	"filename": "icon2.png",
+	"frame": {"x":464,"y":145,"w":111,"h":111},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":111,"h":111},
+	"sourceSize": {"w":111,"h":111}
+},
+{
+	"filename": "icon3.png",
+	"frame": {"x":464,"y":2,"w":141,"h":141},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":141,"h":141},
+	"sourceSize": {"w":141,"h":141}
+},
+{
+	"filename": "icon4.png",
+	"frame": {"x":615,"y":2,"w":160,"h":160},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":160,"h":160},
+	"sourceSize": {"w":160,"h":160}
+},
+{
+	"filename": "icon5.png",
+	"frame": {"x":444,"y":741,"w":169,"h":169},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":169,"h":169},
+	"sourceSize": {"w":169,"h":169}
+},
+{
+	"filename": "icon6.png",
+	"frame": {"x":244,"y":775,"w":198,"h":198},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":198,"h":198},
+	"sourceSize": {"w":198,"h":198}
+},
+{
+	"filename": "icon7.png",
+	"frame": {"x":2,"y":775,"w":240,"h":240},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":240,"h":240},
+	"sourceSize": {"w":240,"h":240}
+},
+{
+	"filename": "icon8.png",
+	"frame": {"x":309,"y":468,"w":271,"h":271},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":271,"h":271},
+	"sourceSize": {"w":271,"h":271}
+},
+{
+	"filename": "icon9.png",
+	"frame": {"x":2,"y":468,"w":305,"h":305},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":305,"h":305},
+	"sourceSize": {"w":305,"h":305}
+}],
+"meta": {
+	"app": "http://www.texturepacker.com",
+	"version": "1.0",
+	"image": "ani.png",
+	"format": "RGBA8888",
+	"size": {"w":1024,"h":1024},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:68841f617587a0e2edf27aa546850a62$"
+}
+}

@@ -1,0 +1,202 @@
+
+hecheng.png
+size: 2882,860
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+hecheng/guang_00000
+  rotate: false
+  xy: 340, 24
+  size: 314, 314
+  orig: 540, 540
+  offset: 113, 113
+  index: -1
+hecheng/guang_00001
+  rotate: false
+  xy: 2, 2
+  size: 336, 336
+  orig: 540, 540
+  offset: 102, 102
+  index: -1
+hecheng/guang_00002
+  rotate: false
+  xy: 1080, 20
+  size: 360, 360
+  orig: 540, 540
+  offset: 90, 90
+  index: -1
+hecheng/guang_00003
+  rotate: false
+  xy: 1776, 20
+  size: 384, 384
+  orig: 540, 540
+  offset: 78, 78
+  index: -1
+hecheng/guang_00004
+  rotate: false
+  xy: 2162, 20
+  size: 406, 406
+  orig: 540, 540
+  offset: 67, 67
+  index: -1
+hecheng/guang_00005
+  rotate: false
+  xy: 1952, 428
+  size: 430, 430
+  orig: 540, 540
+  offset: 55, 55
+  index: -1
+hecheng/guang_00006
+  rotate: false
+  xy: 1498, 406
+  size: 452, 452
+  orig: 540, 540
+  offset: 44, 44
+  index: -1
+hecheng/guang_00007
+  rotate: false
+  xy: 1020, 382
+  size: 476, 476
+  orig: 540, 540
+  offset: 32, 32
+  index: -1
+hecheng/guang_00008
+  rotate: false
+  xy: 522, 362
+  size: 496, 496
+  orig: 540, 540
+  offset: 22, 22
+  index: -1
+hecheng/guang_00009
+  rotate: false
+  xy: 2, 340
+  size: 518, 518
+  orig: 540, 540
+  offset: 11, 11
+  index: -1
+luobe/basketball
+  rotate: false
+  xy: 1601, 5
+  size: 173, 173
+  orig: 173, 173
+  offset: 0, 0
+  index: -1
+shosuo/effect_u09_01
+  rotate: true
+  xy: 2570, 49
+  size: 158, 155
+  orig: 168, 168
+  offset: 3, 9
+  index: -1
+shosuo/effect_u09_02
+  rotate: false
+  xy: 2709, 528
+  size: 163, 157
+  orig: 168, 168
+  offset: 3, 6
+  index: -1
+shosuo/effect_u09_03
+  rotate: false
+  xy: 2384, 499
+  size: 161, 165
+  orig: 168, 168
+  offset: 5, 1
+  index: -1
+shosuo/effect_u09_04
+  rotate: false
+  xy: 2547, 499
+  size: 160, 165
+  orig: 168, 168
+  offset: 7, 0
+  index: -1
+shosuo/effect_u09_05
+  rotate: true
+  xy: 2709, 367
+  size: 159, 162
+  orig: 168, 168
+  offset: 8, 2
+  index: -1
+shosuo/effect_u09_06
+  rotate: true
+  xy: 2570, 209
+  size: 156, 159
+  orig: 168, 168
+  offset: 9, 3
+  index: -1
+shosuo/effect_u09_07
+  rotate: false
+  xy: 2731, 217
+  size: 149, 148
+  orig: 168, 168
+  offset: 17, 10
+  index: -1
+shosuo/effect_u09_08
+  rotate: false
+  xy: 892, 17
+  size: 117, 132
+  orig: 270, 250
+  offset: 73, 58
+  index: -1
+shosuo/effect_u09_09
+  rotate: true
+  xy: 656, 109
+  size: 251, 234
+  orig: 270, 250
+  offset: 10, 4
+  index: -1
+shosuo/effect_u09_10
+  rotate: false
+  xy: 1442, 2
+  size: 157, 176
+  orig: 270, 250
+  offset: 51, 33
+  index: -1
+shosuo/effect_u09_11
+  rotate: true
+  xy: 2570, 687
+  size: 171, 193
+  orig: 270, 250
+  offset: 43, 24
+  index: -1
+shosuo/effect_u09_12
+  rotate: false
+  xy: 892, 151
+  size: 186, 209
+  orig: 270, 250
+  offset: 36, 15
+  index: -1
+shosuo/effect_u09_13
+  rotate: false
+  xy: 1442, 180
+  size: 199, 200
+  orig: 270, 250
+  offset: 30, 29
+  index: -1
+shosuo/effect_u09_14
+  rotate: false
+  xy: 2384, 666
+  size: 182, 192
+  orig: 270, 250
+  offset: 52, 32
+  index: -1
+shosuo/effect_u09_15
+  rotate: false
+  xy: 1643, 296
+  size: 119, 108
+  orig: 270, 250
+  offset: 76, 76
+  index: -1
+shosuo/effect_u09_16
+  rotate: true
+  xy: 1643, 181
+  size: 113, 106
+  orig: 270, 250
+  offset: 77, 76
+  index: -1
+shosuo/effect_u09_17
+  rotate: false
+  xy: 2765, 746
+  size: 112, 112
+  orig: 270, 250
+  offset: 78, 72
+  index: -1

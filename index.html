@@ -3,12 +3,14 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="full-screen" content="true" />
     <meta name="screen-orientation" content="portrait" />
     <meta name="x5-fullscreen" content="true" />
     <meta name="360-fullscreen" content="true" />
+    <canvas id="mainCanvas"></canvas>>
     <title>vf</title>
     <style>
         html,
@@ -31,22 +33,19 @@
     <script src="./node_modules/pixi-particles/dist/pixi-particles.js"></script>
     <script src="./libs/TweenMax.min.js"></script>
     <!-- <script src="./libs/matter.js"></script> -->
-    <script src="./src/globalData.js"></script>
-    <script src="./src/soundManager.js"></script>
-    <script src="./src/myButton.js"></script>
-    <script src="./src/itemBody.js"></script>
-    <script src="./src/mainUI.js"></script>
+    <script src="./dist/main.js"></script>
     <!-- <script src="./dist/main.js"></script> -->
     <script>
         var gameConfig = {
             // 'b1'=
-            getItemCallBack:function (){console.log("getItemCallBack")},
-            firstRewardCallBack:function (){console.log("firstRewardCallBack")},
-            rankCallBack:function (){console.log("rankCallBack")},
-            guafenCallBack:function (){console.log("guafenCallBack")},
+            getItemCallBack: function () { console.log("getItemCallBack") },
+            firstRewardCallBack: function () { console.log("firstRewardCallBack") },
+            rankCallBack: function () { console.log("rankCallBack") },
+            guafenCallBack: function () { console.log("guafenCallBack") },
         };
-         
-        window["mainUi"].init(gameConfig);
+        const canvas = document.getElementById("mainCanvas");
+        console.error("window.innerWidth", window.innerWidth);
+        window["mainUi"].init(gameConfig, canvas);
     </script>
 </body>
 
